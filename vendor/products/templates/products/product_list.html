@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Products</h2>
+
+<div>
+    {% for product in products %}
+        <div style="border:1px solid #ccc; margin:10px; padding:10px;">
+            <h3>
+                <a href="{% url 'product_detail' product.slug %}">
+                    {{ product.name }}
+                </a>
+            </h3>
+            <p>₹{{ product.get_price }}</p>
+            <p>Stock: {{ product.stock }}</p>
+        </div>
+    {% endfor %}
+</div>
+{% if user.is_authenticated and user.role == 'vendor' %}
+    <a href="{% url 'add_product' %}" class="btn btn-success">
+        Add Product
+    </a>
+{% endif %}
+
+{% endblock %}

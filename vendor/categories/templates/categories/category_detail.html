@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>{{ category.name }}</h2>
+
+{% if subcategories %}
+    <h3>Sub Categories</h3>
+    <ul>
+        {% for sub in subcategories %}
+            <li>{{ sub.name }}</li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No subcategories available.</p>
+{% endif %}
+
+{% endblock %}

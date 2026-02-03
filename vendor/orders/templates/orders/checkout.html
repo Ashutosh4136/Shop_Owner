@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Checkout</h2>
+
+<h3>Select Shipping Address</h3>
+<form method="post">
+    {% csrf_token %}
+    {% for address in addresses %}
+    <input type="radio" name="address" value="{{ address.id }}" required> 
+    {{ address.full_name }}, {{ address.address_line }}, {{ address.city }} <br>
+    {% endfor %}
+
+    <h3>Order Summary</h3>
+    <ul>
+        {% for item in cart.items.all %}
+        <li>{{ item.product.name }} x {{ item.quantity }} - ₹{{ item.total_price }}</li>
+        {% endfor %}
+    </ul>
+    <h4>Total: ₹{{ cart.total_price }}</h4>
+
+    <button type="submit">Place Order</button>
+</form>
+
+{% endblock %}

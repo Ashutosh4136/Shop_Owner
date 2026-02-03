@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Order #{{ order.id }}</h2>
+<p>Status: {{ order.status }}</p>
+<p>Shipping Address: {{ order.address.full_name }}, {{ order.address.address_line }}, {{ order.address.city }}</p>
+
+<h3>Items</h3>
+<ul>
+    {% for item in order.items.all %}
+    <li>{{ item.product.name }} x {{ item.quantity }} - ₹{{ item.price }}</li>
+    {% endfor %}
+</ul>
+
+<h4>Total Price: ₹{{ order.total_price }}</h4>
+
+{% endblock %}

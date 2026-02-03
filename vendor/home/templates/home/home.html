@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Welcome to Our Store</h1>
+
+{% for banner in banners %}
+    <div>
+        <h2>{{ banner.title }}</h2>
+        <p>{{ banner.subtitle }}</p>
+        <img src="{{ banner.image.url }}" width="300">
+    </div>
+{% endfor %}
+
+{% endblock %}

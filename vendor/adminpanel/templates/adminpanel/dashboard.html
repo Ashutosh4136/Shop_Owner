@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Admin Dashboard</h1>
+
+<div style="display:flex; gap:20px;">
+    <div style="border:1px solid #ccc; padding:20px; flex:1;">
+        <h3>Total Revenue</h3>
+        <p>₹{{ total_revenue|floatformat:2 }}</p>
+    </div>
+    <div style="border:1px solid #ccc; padding:20px; flex:1;">
+        <h3>Total Orders</h3>
+        <p>{{ total_orders }}</p>
+    </div>
+    <div style="border:1px solid #ccc; padding:20px; flex:1;">
+        <h3>User Count</h3>
+        <p>{{ user_count }}</p>
+    </div>
+    <div style="border:1px solid #ccc; padding:20px; flex:1;">
+        <h3>Product Count</h3>
+        <p>{{ product_count }}</p>
+    </div>
+</div>
+
+<h2>Sales Analytics (Last 6 Months)</h2>
+<canvas id="salesChart" width="600" height="300"></canvas>
+
+<h2>Stock Alerts (Low Stock)</h2>
+{% if low_stock_products %}
+<ul>
+    {% for product in low_stock_products %}
+    <li>{{ product.name }} - Stock: {{ product.stock }}</li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>All products have sufficient stock.</p>
+{% endif %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('salesChart').getContext('2d');
+    const salesChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: {{ months|safe }},
+            datasets: [{
+                label: 'Monthly Sales (₹)',
+                data: {{ totals|safe }},
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                fill: true,
+                tension: 0.3,
+                borderWidth: 2,
+                pointRadius: 5
+            }]
+        },
+        options: {
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+</script>
+
+<a href="{% url 'admin_order_list' %}">Manage Orders</a>
+
+{% endblock %}

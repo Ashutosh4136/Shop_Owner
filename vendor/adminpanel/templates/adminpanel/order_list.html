@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Order Management</h1>
+
+<table border="1" cellpadding="10" cellspacing="0" style="width:100%;">
+    <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>User</th>
+            <th>Status</th>
+            <th>Total Price</th>
+            <th>Created At</th>
+            <th>Update Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in orders %}
+        <tr>
+            <td>{{ order.id }}</td>
+            <td>{{ order.user.email }}</td>
+            <td>{{ order.status }}</td>
+            <td>₹{{ order.total_price }}</td>
+            <td>{{ order.created_at|date:"Y-m-d H:i" }}</td>
+            <td><a href="{% url 'admin_update_order_status' order.id %}">Update</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{% url 'admin_dashboard' %}">Back to Dashboard</a>
+
+{% endblock %}

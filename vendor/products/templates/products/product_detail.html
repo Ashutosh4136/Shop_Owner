@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>{{ product.name }}</h2>
+
+<div>
+    {% for image in images %}
+        <img src="{{ image.image.url }}" width="200">
+    {% endfor %}
+</div>
+
+<p>{{ product.description }}</p>
+
+{% if product.discount_price %}
+    <p>
+        <del>₹{{ product.price }}</del>
+        <strong>₹{{ product.discount_price }}</strong>
+    </p>
+{% else %}
+    <p><strong>₹{{ product.price }}</strong></p>
+{% endif %}
+
+<p>Stock: {{ product.stock }}</p>
+<h3>Reviews ({{ product.reviews.count }})</h3>
+<p>Average Rating: 
+    {% with total=0 %}
+    {% for review in product.reviews.all %}
+        {% with total=total|add:review.rating %}
+        {% endwith %}
+    {% endfor %}
+    {{ total|divisibleby:product.reviews.count|floatformat:1 }}
+    {% endwith %}
+</p>
+
+<ul>
+    {% for review in product.reviews.all %}
+    <li>
+        <strong>{{ review.user.email }}</strong> - {{ review.rating }} ⭐<br>
+        {{ review.comment }}
+    </li>
+    {% empty %}
+    <li>No reviews yet.</li>
+    {% endfor %}
+</ul>
+{% if user.is_authenticated and user.role == 'vendor' %}
+    <a href="{% url 'add_product' %}" class="btn btn-success">
+        Add Product
+    </a>
+{% endif %}
+
+
+<a href="{% url 'add_review' product.slug %}">Add / Edit your review</a>
+
+<button>Add to Cart</button>
+
+{% endblock %}
