@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 # Create your views here.
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import user_passes_test,login_required
 from django.contrib.auth import get_user_model
 from orders.models import Order
 from products.models import Product
@@ -10,12 +10,31 @@ from django.db.models import Sum, Count
 from django.utils.timezone import now
 from datetime import timedelta
 from django.contrib import messages
+from django.http import HttpResponseForbidden
+
+
 
 User = get_user_model()
 
 def admin_required(view_func):
     return user_passes_test(lambda u: u.is_staff)(view_func)
 
+
+@login_required
+def vendor_dashboard(request):
+    if request.user.role != 'vendor':
+        return HttpResponseForbidden("Access denied")
+
+    return render(request, 'vendor/dashboard.html')
+
+
+
+@login_required
+def customer_dashboard(request):
+    if request.user.role != 'customer':
+        return redirect('home')
+
+    return render(request, 'customerpanel/dashboard.html')
 
 @admin_required
 def dashboard_view(request):
