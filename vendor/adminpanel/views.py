@@ -10,8 +10,6 @@ from django.db.models import Sum, Count
 from django.utils.timezone import now
 from datetime import timedelta
 from django.contrib import messages
-from django.http import HttpResponseForbidden
-
 
 
 User = get_user_model()
@@ -23,9 +21,9 @@ def admin_required(view_func):
 @login_required
 def vendor_dashboard(request):
     if request.user.role != 'vendor':
-        return HttpResponseForbidden("Access denied")
+        return redirect('home')
 
-    return render(request, 'vendor/dashboard.html')
+    return render(request, 'vendorpanel/dashboard.html')
 
 
 
