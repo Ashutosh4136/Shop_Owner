@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 # Create your views here.
 from django.shortcuts import render, get_object_or_404,redirect
-from .models import Product
+from .models import Product,ProductImage
 from categories.models import Category
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
@@ -38,19 +38,33 @@ def search_products(request):
 
 @login_required
 def add_product(request):
-    # ❌ Customers blocked
+    #Customers blocked
     if request.user.role != 'vendor' :
         return HttpResponseForbidden("Only vendors can add products")
+    categories = Category.objects.filter(is_active=True,parent__isnull=False)
 
+#     
     if request.method == 'POST':
-        Product.objects.create(
+        category_id = request.POST.get('category')
+        category = Category.objects.get(id=category_id)
+
+        product = Product.objects.create(
             vendor=request.user,
             name=request.POST.get('name'),
+            category=category,
             price=request.POST.get('price'),
             stock=request.POST.get('stock'),
             description=request.POST.get('description'),
-            image=request.FILES.get('image'),
         )
+
+        image = request.FILES.get('image')
+        if image:
+            ProductImage.objects.create(
+                product=product,
+                image=image,
+                is_primary=True
+            )
+
         return redirect('vendor_products')
 
-    return render(request, 'products/add_product.html')
+    return render(request, 'products/add_product.html', {'categories': categories})
