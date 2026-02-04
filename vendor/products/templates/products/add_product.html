@@ -37,6 +37,15 @@
                             <label>Description</label>
                             <textarea name="description" class="form-control" rows="4"></textarea>
                         </div>
+                            <select name="category" class="form-control" required>
+                            <option value="">Select Category</option>
+
+                            {% for category in categories %}
+                                <option value="{{ category.id }}">
+                                    {{ category.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
 
                         <button class="btn btn-success w-100">Add Product</button>
                     </form>
