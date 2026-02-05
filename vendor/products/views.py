@@ -20,7 +20,7 @@ def product_list(request):
 def product_detail(request, slug):
     product = get_object_or_404(Product, slug=slug, is_active=True)
     images = product.images.all()
-
+    print(product.slug)
     return render(request, 'products/product_detail.html', {
         'product': product,
         'images': images

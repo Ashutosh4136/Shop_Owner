@@ -18,12 +18,22 @@ def admin_required(view_func):
     return user_passes_test(lambda u: u.is_staff)(view_func)
 
 
-@login_required
+@login_required(login_url='login')
 def vendor_dashboard(request):
+    print(request.user)
+    # print(request.user.is_authenicated)
     if request.user.role != 'vendor':
         return redirect('home')
 
-    return render(request, 'vendorpanel/dashboard.html')
+    return render(request, 'adminpanel/vendor_dashboard.html')
+
+
+def vendor_products(request):
+    products = Product.objects.filter(vendor=request.user)
+    return render(request, 'vendor/products.html', {
+        'products': products
+    })
+
 
 
 
