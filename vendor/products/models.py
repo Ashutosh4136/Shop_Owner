@@ -11,7 +11,7 @@ User = settings.AUTH_USER_MODEL
 class Product(models.Model):
     vendor = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
-    slug = models.SlugField(unique=True,blank=True)
+    slug = models.SlugField(max_length=220,unique=True,blank=True)
     category = models.ForeignKey( Category, on_delete=models.CASCADE, related_name='products')
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
