@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}My Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+
+    <h2 class="mb-4">👋 Hello, {{ request.user.username }}</h2>
+
+    <!-- Stats -->
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card text-bg-primary mb-3">
+                <div class="card-body">
+                    <h5>Total Orders</h5>
+                    <h3>{{ total_orders }}</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-bg-success mb-3">
+                <div class="card-body">
+                    <h5>Delivered</h5>
+                    <h3>{{ delivered_orders }}</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-bg-warning mb-3">
+                <div class="card-body">
+                    <h5>Pending</h5>
+                    <h3>{{ pending_orders }}</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-bg-danger mb-3">
+                <div class="card-body">
+                    <h5>Wishlist</h5>
+                    <h3>{{ wishlist_count }}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <a href="{% url 'my_orders' %}" class="btn btn-outline-primary w-100 mb-2">
+                🛒 My Orders
+            </a>
+        </div>
+
+        <div class="col-md-4">
+            <a href="{% url 'wishlist' %}" class="btn btn-outline-danger w-100 mb-2">
+                ❤️ Wishlist
+            </a>
+        </div>
+
+        <div class="col-md-4">
+            <a href="{% url 'profile' %}" class="btn btn-outline-dark w-100 mb-2">
+                👤 My Profile
+            </a>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
