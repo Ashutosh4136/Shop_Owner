@@ -21,16 +21,7 @@
 {% endif %}
 
 <p>Stock: {{ product.stock }}</p>
-{% comment %} <h3>Reviews ({{ product.reviews.count }})</h3>
-<p>Average Rating: 
-    {% with total=0 %}
-    {% for review in product.reviews.all %}
-        {% with total=total|add:review.rating %}
-        {% endwith %}
-    {% endfor %}
-    {{ total|divisibleby:product.reviews.count|floatformat:1 }}
-    {% endwith %}
-</p> {% endcomment %}
+
 
 <ul>
     {% for review in product.reviews.all %}
@@ -42,14 +33,10 @@
     <li>No reviews yet.</li>
     {% endfor %}
 </ul>
-{% if user.is_authenticated and user.role == 'vendor' %}
-    <a href="{% url 'add_product' %}" class="btn btn-success">
-        Add Product
-    </a>
-{% endif %}
 
 
-<a href="{% url 'add_review' product.slug %}">Add / Edit your review</a>
+
+<a href="{% url 'add_review' product.slug %}" class="btn btn-success">Add / Edit your review</a>
 
 <button>Add to Cart</button>
 
