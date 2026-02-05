@@ -21,7 +21,7 @@
 {% endif %}
 
 <p>Stock: {{ product.stock }}</p>
-<h3>Reviews ({{ product.reviews.count }})</h3>
+{% comment %} <h3>Reviews ({{ product.reviews.count }})</h3>
 <p>Average Rating: 
     {% with total=0 %}
     {% for review in product.reviews.all %}
@@ -30,7 +30,7 @@
     {% endfor %}
     {{ total|divisibleby:product.reviews.count|floatformat:1 }}
     {% endwith %}
-</p>
+</p> {% endcomment %}
 
 <ul>
     {% for review in product.reviews.all %}
