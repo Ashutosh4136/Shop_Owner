@@ -56,17 +56,17 @@
               {% endif %}
             </td>
 
-            {% comment %} <td class="text-end">
-              <a href="{% url '#' product.id %}"
+              <td class="text-end">
+              <a href="{% url 'vendor_edit_product' product.id %}"
                  class="btn btn-sm btn-outline-primary">
                 Edit
-              </a> {% endcomment %}
+              </a> 
 
-              {% comment %} <a href="{% url '#' product.id %}"
+               <a href="{% url 'vendor_delete_product' product.id %}"
                  class="btn btn-sm btn-outline-danger"
                  onclick="return confirm('Are you sure?')">
                 Delete
-              </a> {% endcomment %}
+              </a> 
             </td>
           </tr>
           {% endfor %}

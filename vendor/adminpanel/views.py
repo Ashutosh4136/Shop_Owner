@@ -28,10 +28,34 @@ def vendor_dashboard(request):
 
 def vendor_products(request):
     products = Product.objects.filter(vendor=request.user)
-    return render(request, 'vendor/products.html', {
+    return render(request, 'adminpanel/manage_product.html', {
         'products': products
     })
 
+
+
+@login_required
+def edit_product(request, id):
+    product = get_object_or_404(Product, id=id, vendor=request.user)
+
+    if request.method == "POST":
+        product.name = request.POST.get("name")
+        product.price = request.POST.get("price")
+        product.stock = request.POST.get("stock")
+        product.save()
+        return redirect("vendor_products")
+
+    return render(request, "adminpanel/edit_product.html", {
+        "product": product
+    })
+
+
+
+@login_required
+def delete_product(request, id):
+    product = get_object_or_404(Product, id=id, vendor=request.user)
+    product.delete()
+    return redirect("vendor_products")
 
 
 
@@ -40,7 +64,7 @@ def customer_dashboard(request):
     if request.user.role != 'customer':
         return redirect('home')
 
-    return render(request, 'customerpanel/dashboard.html')
+    return render(request, 'adminpanel/dashboard.html')
 
 @admin_required
 def dashboard_view(request):
