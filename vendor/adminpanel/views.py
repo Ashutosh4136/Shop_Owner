@@ -20,8 +20,6 @@ def admin_required(view_func):
 
 @login_required(login_url='login')
 def vendor_dashboard(request):
-    print(request.user)
-    # print(request.user.is_authenicated)
     if request.user.role != 'vendor':
         return redirect('home')
 
