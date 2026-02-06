@@ -38,6 +38,6 @@
 
 <a href="{% url 'add_review' product.slug %}" class="btn btn-success">Add / Edit your review</a>
 
-<button>Add to Cart</button>
+<a href="{% url 'add_to_cart' product.id %}" class="btn btn-success">Add to cart</a>
 
 {% endblock %}
