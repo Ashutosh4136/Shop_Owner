@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.shortcuts import redirect, render, get_object_or_404
 from products.models import Product
 from .models import CartItem
+from django.contrib.auth.decorators import login_required
 from .utils import add_to_cart, get_cart, SESSION_CART_KEY
 
 def add_to_cart_view(request, product_id):
@@ -37,6 +38,68 @@ def cart_detail_view(request):
         'items': items,
         'total': total,
     })
+
+@login_required
+def increase_qty(request, product_id):
+    if request.user.is_authenticated:
+        cart = get_cart(request)
+
+        cart_item, created = CartItem.objects.get_or_create(
+            cart=cart,
+            product_id=product_id,
+            defaults={'quantity': 1}
+        )
+
+        if not created:
+            cart_item.quantity += 1
+            cart_item.save()
+
+    else:
+        session_cart = request.session.get(SESSION_CART_KEY, {})
+        pid = str(product_id)
+
+        session_cart[pid] = session_cart.get(pid, 0) + 1
+        request.session[SESSION_CART_KEY] = session_cart
+
+    return redirect('cart_detail')
+
+
+@login_required
+def decrease_qty(request, product_id):
+    if request.user.is_authenticated:
+        cart = get_cart(request)
+
+        try:
+            cart_item = CartItem.objects.get(
+                cart=cart,
+                product_id=product_id
+            )
+        except CartItem.DoesNotExist:
+            return redirect('cart_detail')
+
+        if cart_item.quantity > 1:
+            cart_item.quantity -= 1
+            cart_item.save()
+        else:
+            cart_item.delete()
+
+    else:
+        session_cart = request.session.get(SESSION_CART_KEY, {})
+        pid = str(product_id)
+
+        if pid in session_cart:
+            if session_cart[pid] > 1:
+                session_cart[pid] -= 1
+            else:
+                del session_cart[pid]
+
+            request.session[SESSION_CART_KEY] = session_cart
+
+    return redirect('cart_detail')
+
+
+
+
 
 
 def remove_from_cart_view(request, product_id):

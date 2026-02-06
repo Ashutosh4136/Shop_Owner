@@ -1,40 +1,92 @@
-{% extends 'base.html' %}
-
+{% extends "base.html" %}
 {% block content %}
-<h2>Your Cart</h2>
 
-{% if items %}
-<table border="1" cellpadding="10">
-    <thead>
-        <tr>
-            <th>Product</th>
-            <th>Qty</th>
-            <th>Price</th>
-            <th>Total</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-    {% for item in items %}
-        <tr>
-            <td>{{ item.product.name }}</td>
-            <td>{{ item.quantity }}</td>
-            <td>₹{{ item.product.get_price }}</td>
-            <td>₹{{ item.total_price }}</td>
-            <td>
-                <a href="{% url 'remove_from_cart' item.product.id %}">Remove</a>
-            </td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
+<div class="container mt-5">
 
-<h3>Total: ₹{{ total }}</h3>
+    <h2 class="mb-4 fw-bold">🛒 Your Cart</h2>
 
-<a href="/checkout/">Proceed to Checkout</a>
+    {% if items %}
+    <div class="table-responsive">
+        <table class="table table-bordered align-middle text-center shadow-sm">
+            <thead class="table-dark">
+                <tr>
+                    <th>Product</th>
+                    <th>Qty</th>
+                    <th>Price</th>
+                    <th>Total</th>
+                    <th>Update</th>
+                    <th>Remove</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td class="fw-semibold">{{ item.product.name }}</td>
 
-{% else %}
-<p>Your cart is empty.</p>
-{% endif %}
+                    <td>
+                        <span class="badge bg-primary fs-6">
+                            {{ item.quantity }}
+                        </span>
+                    </td>
+
+                    <td>₹{{ item.product.get_price }}</td>
+
+                    <td class="fw-bold text-success">
+                        ₹{{ item.total_price }}
+                    </td>
+
+                    <td>
+                        <div class="d-flex justify-content-center align-items-center gap-2">
+                            <a href="{% url 'decrease_qty' item.product.id %}"
+                               class="btn btn-sm btn-outline-danger">
+                                −
+                            </a>
+
+                            <span class="fw-bold">{{ item.quantity }}</span>
+
+                            <a href="{% url 'increase_qty' item.product.id %}"
+                               class="btn btn-sm btn-outline-success">
+                                +
+                            </a>
+                        </div>
+                    </td>
+
+                    <td>
+                        <a href="{% url 'remove_from_cart' item.product.id %}"
+                           class="btn btn-sm btn-warning">
+                            Remove
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Cart Summary -->
+    <div class="d-flex justify-content-between align-items-center mt-4 p-3 border rounded shadow-sm bg-light">
+        <h4 class="mb-0">
+            Total:
+            <span class="text-success fw-bold">
+                ₹{{ total }}
+            </span>
+        </h4>
+
+        <a href="/checkout/" class="btn btn-lg btn-success">
+            Proceed to Checkout →
+        </a>
+    </div>
+
+    {% else %}
+        <div class="alert alert-info text-center mt-5">
+            <h5>Your cart is empty 🛍️</h5>
+            <a href="/products/" class="btn btn-primary mt-2">
+                Continue Shopping
+            </a>
+        </div>
+    {% endif %}
+
+</div>
 
 {% endblock %}
+
