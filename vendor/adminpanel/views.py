@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import user_passes_test,login_required
 from django.contrib.auth import get_user_model
-from orders.models import Order
+from orders.models import Order,OrderItem
 from products.models import Product
 from django.db.models import Sum, Count
 from django.utils.timezone import now
@@ -49,13 +49,24 @@ def edit_product(request, id):
         "product": product
     })
 
-
-
 @login_required
 def delete_product(request, id):
     product = get_object_or_404(Product, id=id, vendor=request.user)
     product.delete()
     return redirect("vendor_products")
+
+
+
+@login_required
+def vendor_orders(request):
+    orders = OrderItem.objects.filter(
+        product__vendor=request.user
+    ).select_related("order", "product")
+
+    return render(request, "adminpanel/vendor_order.html", {
+        "orders": orders
+    })
+
 
 
 
