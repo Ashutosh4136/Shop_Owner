@@ -25,13 +25,15 @@ def product_detail(request, slug):
         'product': product,
         'images': images
     })
-def search_products(request):
+
+def product_search(request):
     query = request.GET.get('q')
-    products = Product.objects.filter(name__icontains=query)
-    return render(request, 'products/search_results.html', {
+    products = Product.objects.filter(name__icontains=query) if query else []
+    return render(request, 'products/search_result.html', {
         'products': products,
         'query': query
     })
+
 
 
 
