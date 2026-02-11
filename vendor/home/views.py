@@ -3,10 +3,25 @@ from django.shortcuts import render
 # Create your views here.
 from django.shortcuts import render, get_object_or_404
 from .models import Banner, StaticPage
+from categories.models import Category
+from products.models import Product
 
-def home_view(request):
-    banners = Banner.objects.filter(is_active=True)
-    return render(request, 'home/home.html', {'banners': banners})
+def home(request):
+    categories = Category.objects.all()
+
+    category_products = []
+    for category in categories:
+        products = Product.objects.filter(category=category)[:4]
+        category_products.append({
+            'category': category,
+            'products': products
+        })
+
+    context = {
+        'category_products': category_products
+    }
+    return render(request, 'home/home.html', context)
+
 
 
 def about_view(request):
