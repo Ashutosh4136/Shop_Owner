@@ -9,8 +9,24 @@ from .utils import add_to_cart, get_cart, SESSION_CART_KEY
 
 def add_to_cart_view(request, product_id):
     quantity = int(request.GET.get('qty', 1))
-    add_to_cart(request, product_id, quantity)
+
+    if request.user.is_authenticated:
+        add_to_cart(request, product_id, quantity)
+    else:
+        session_cart = request.session.get(SESSION_CART_KEY, {})
+
+        product_id_str = str(product_id)
+
+        if product_id_str in session_cart:
+            session_cart[product_id_str] += quantity
+        else:
+            session_cart[product_id_str] = quantity
+
+        request.session[SESSION_CART_KEY] = session_cart
+        request.session.modified = True
+
     return redirect('cart_detail')
+
 
 
 def cart_detail_view(request):
