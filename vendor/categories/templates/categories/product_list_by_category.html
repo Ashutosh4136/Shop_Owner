@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block content %}
+ 
+<div class="d-flex justify-content-end mb-4">
+
+    <form method="get">
+        <select name="sort"
+                class="form-select"
+                onchange="this.form.submit()">
+
+            <option value="">Sort By</option>
+            <option value="price_low">Price: Low to High</option>
+            <option value="price_high">Price: High to Low</option>
+            <option value="newest">Newest First</option>
+            <option value="discount">Biggest Discount</option>
+
+        </select>
+    </form>
+
+</div>
+
+
+<div class="col-md-9">
+    <div class="row g-4">
+
+        {% for product in products %}
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm product-card">
+
+                <div class="position-relative overflow-hidden">
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}"
+                             class="card-img-top product-img"
+                             alt="{{ product.name }}">
+                    {% else %}
+                        <img src="https://via.placeholder.com/300x250"
+                             class="card-img-top product-img">
+                    {% endif %}
+                </div>
+
+                <div class="card-body text-center">
+                    <h6 class="fw-bold">{{ product.name }}</h6>
+                    <p class="text-muted mb-2">₹{{ product.price }}</p>
+
+                    <a href="{% url 'product_detail' product.slug %}"
+                       class="btn btn-dark btn-sm w-100">
+                        View Product
+                    </a>
+                </div>
+
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+</div>
+
+
+{% endblock %}
