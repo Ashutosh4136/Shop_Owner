@@ -7,14 +7,28 @@ from categories.models import Category
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
 
-def product_list(request):
+def product_list(request, category_slug=None):
     products = Product.objects.filter(is_active=True)
-    categories = Category.objects.filter(is_active=True, parent=None)
 
-    return render(request, 'products/product_list.html', {
-        'products': products,
-        'categories': categories
-    })
+    if category_slug:
+        products = products.filter(category__slug=category_slug)
+
+    sort = request.GET.get('sort')
+
+    if sort == 'price_low':
+        products = products.order_by('price')
+    elif sort == 'price_high':
+        products = products.order_by('-price')
+    elif sort == 'newest':
+        products = products.order_by('-created_at')
+    elif sort == 'discount':
+        products = products.order_by('-discount')
+
+    context = {
+        'products': products
+    }
+    return render(request, 'products/product_list.html', context)
+
 
 
 def product_detail(request, slug):
