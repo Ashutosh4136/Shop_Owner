@@ -13,6 +13,7 @@ User = settings.AUTH_USER_MODEL
 class Product(models.Model):
     vendor = models.ForeignKey(User, on_delete=models.CASCADE)
     is_active = models.BooleanField(default=True)
+    image = models.ImageField(upload_to='products/', blank=True, null=True)
     name = models.CharField(max_length=200)
     slug = models.SlugField(max_length=220,unique=True,blank=True)
     category = models.ForeignKey( Category, on_delete=models.CASCADE, related_name='products')
