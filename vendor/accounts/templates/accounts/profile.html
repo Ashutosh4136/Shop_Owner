@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}My Profile{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">My Profile</h4>
+                </div>
+
+                <div class="card-body">
+
+                    <div class="mb-3">
+                        <strong>Username:</strong>
+                        <p>{{ request.user.username }}</p>
+                    </div>
+
+                    <div class="mb-3">
+                        <strong>Email:</strong>
+                        <p>{{ request.user.email }}</p>
+                    </div>
+
+                    <div class="mb-3">
+                        <strong>Date Joined:</strong>
+                        <p>{{ request.user.date_joined|date:"F d, Y" }}</p>
+                    </div>
+
+                    <div class="mb-3">
+                        <strong>Total Orders:</strong>
+                        <p>{{ total_orders }}</p>
+                    </div>
+
+                    <hr>
+
+                     <div class="d-flex justify-content-between"> 
+                        <a href="{% url 'order_list' %}" class="btn btn-outline-primary">
+                            View My Orders
+                        </a>
+                          
+                        <a href="{% url 'edit_profile' %}" class="btn btn-warning">
+                            Edit Profile 
+
+                        <a href="{% url 'logout' %}" class="btn btn-danger">
+                            Logout
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
