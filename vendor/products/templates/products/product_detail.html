@@ -3,12 +3,7 @@
 {% block content %}
 <h2>{{ product.name }}</h2>
 
-{% comment %} <div>
-    {% for image in images %}
-        <img src="{{ product.image.url }}
-" width="200">
-    {% endfor %}
-</div> {% endcomment %}
+
 {% if product.image %}
     <img src="{{ product.image.url }}" width="40%" class="img-fluid">
 {% else %}
@@ -27,7 +22,9 @@
     <p><strong>₹{{ product.price }}</strong></p>
 {% endif %}
 
-<p>Stock: {{ product.stock }}</p>
+{% if request.user.is_staff %}
+    <p><strong>Stock:</strong> {{ product.stock }}</p>
+{% endif %}
 
 
 <ul>
