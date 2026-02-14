@@ -75,7 +75,7 @@ def customer_dashboard(request):
     if request.user.role != 'customer':
         return redirect('home')
 
-    return render(request, 'adminpanel/dashboard.html')
+    return render(request, 'accounts/profile.html')
 
 @admin_required
 def dashboard_view(request):
