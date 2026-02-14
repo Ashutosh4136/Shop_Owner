@@ -42,6 +42,22 @@ def profile_view(request):
     addresses = Address.objects.filter(user=request.user)
     return render(request, 'accounts/profile.html', {'addresses': addresses})
 
+from .forms import UserUpdateForm
+from django.contrib import messages
+
+@login_required
+def edit_profile_view(request):
+    if request.method == 'POST':
+        form = UserUpdateForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Profile updated successfully.")
+            return redirect('profile')
+    else:
+        form = UserUpdateForm(instance=request.user)
+
+    return render(request, 'accounts/edit_profile.html', {'form': form})
+
 
 @login_required
 def add_address(request):
